@@ -41,3 +41,19 @@ let ``Can use symbols in operations`` () =
     
     evaluateAndAssertEqualsWithEnvironment additionInput expectedAdditionOutput newEnvironment
     
+[<Fact>]
+let ``Can define functions`` () =
+    
+    let environment: Environment = { 
+        Symbols = Dictionary<Atom, Atom>()
+    }
+    
+    let input = "(define (add x y) (+ x y))"
+    let expectedOutput = Atom.Symbol "add"
+    
+    let newEnvironment = evaluateAndAssertEqualsWithEnvironment input expectedOutput environment
+    
+    let additionInput = "(add 1 2)"
+    let expectedAdditionOutput = Atom.Integer 3
+    
+    evaluateAndAssertEqualsWithEnvironment additionInput expectedAdditionOutput newEnvironment

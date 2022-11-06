@@ -15,17 +15,17 @@ let ``Can add numbers`` () =
     evaluateAndAssertEquals input expectedOutput
     
 [<Fact>]
-let ``Can evaluate embedded expressions`` () =
+let ``Can subtract numbers`` () =
     
-    let input = "(+ (+ 1 2) (- 2 1))"
-    let expectedOutput = Atom.Integer 4
+    let input = "(- 349 137)"
+    let expectedOutput = Atom.Integer 212
     
     evaluateAndAssertEquals input expectedOutput
     
 [<Fact>]
-let ``Can define symbols`` () =
+let ``Can evaluate embedded expressions`` () =
     
-    let input = "(define x 4)"
+    let input = "(+ (+ 1 2) (- 2 1))"
     let expectedOutput = Atom.Integer 4
     
     evaluateAndAssertEquals input expectedOutput

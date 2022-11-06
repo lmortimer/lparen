@@ -16,11 +16,40 @@ let rec eval(exp: Atom) (environment: Environment): Atom =
 
     match exp with
     | Integer x -> Atom.Integer x
-    | List x when x.Head = Atom.Symbol "define" ->
-        let symbol = x.Item(1)
-        let value = x.Item(2)
-        environment.Symbols[symbol] <- eval value environment
-        symbol
+    | List [Symbol "define"; firstArg; secondArg] ->
+        
+        // define can be in one of two formats
+        match firstArg with
+        
+        // 1. assigning a value to a symbol. eg: (define x 100)
+        | Symbol s -> 
+            let symbol = firstArg   // x
+            let value = secondArg   // 100
+            environment.Symbols[symbol] <- eval value environment
+            symbol
+        // 2. defining a function. eg: (define (add x y) (+ x y))
+        | List args ->
+                        
+            // if the first arg is a list then extract the Atoms
+            let parsedFirstArg =
+                match firstArg with
+                | List atoms -> atoms
+                | _ -> failwith $"First argument to define expected to be a list of Atoms"
+        
+            let symbolName = parsedFirstArg.Head       // add
+            let lambdaParameters = parsedFirstArg.Tail // [x; y]
+                   
+            let func = Atom.Lambda {
+                Parameters = lambdaParameters
+                Body = secondArg
+                Environment = environment
+            }
+            
+            environment.Symbols[symbolName] <- func
+            
+            symbolName
+        | _ -> failwith "define must be called with two arguments"
+        
     | List [Symbol "lambda"; parameters; body] ->
 
         let parsedParameters =
@@ -79,3 +108,4 @@ let rec eval(exp: Atom) (environment: Environment): Atom =
             
             eval lambda.Body environment
         | _ -> failwith $"Symbol {symbol} is not callable"
+    | Lambda x -> failwith $"Lambda with {x}"
