@@ -8,6 +8,8 @@
   <ItemGroup>
     <Compile Include="Common.fs" />
     <Compile Include="Parser.fs" />
+    <Compile Include="SpecialForms/Define.fs" />
+    <Compile Include="SpecialForms/Lambda.fs" />
     <Compile Include="Eval.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

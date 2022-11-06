@@ -17,3 +17,6 @@ and
     Environment = {
         Symbols: Dictionary<Atom, Atom>
     }
+
+// Evaluates an Atom in an Environment
+type Eval = Atom -> Environment -> Atom

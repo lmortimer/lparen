@@ -1,6 +1,8 @@
 module LParen.Interpreter.Eval
 
 open LParen.Interpreter.Common
+open LParen.Interpreter.SpecialForms.Define
+open LParen.Interpreter.SpecialForms.Lambda
 
 let inline (+) (x: Atom) (y:Atom) =
     match (x, y) with
@@ -11,57 +13,13 @@ let inline (-) (x: Atom) (y:Atom) =
     match (x, y) with
     | (Integer x, Integer y) -> Atom.Integer (x - y)
     | _ -> failwith "Subtract only supports integers"
-    
-let rec eval(exp: Atom) (environment: Environment): Atom =
+        
+let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
 
     match exp with
     | Integer x -> Atom.Integer x
-    | List [Symbol "define"; firstArg; secondArg] ->
-        
-        // define can be in one of two formats
-        match firstArg with
-        
-        // 1. assigning a value to a symbol. eg: (define x 100)
-        | Symbol s -> 
-            let symbol = firstArg   // x
-            let value = secondArg   // 100
-            environment.Symbols[symbol] <- eval value environment
-            symbol
-        // 2. defining a function. eg: (define (add x y) (+ x y))
-        | List args ->
-                        
-            // if the first arg is a list then extract the Atoms
-            let parsedFirstArg =
-                match firstArg with
-                | List atoms -> atoms
-                | _ -> failwith $"First argument to define expected to be a list of Atoms"
-        
-            let symbolName = parsedFirstArg.Head       // add
-            let lambdaParameters = parsedFirstArg.Tail // [x; y]
-                   
-            let func = Atom.Lambda {
-                Parameters = lambdaParameters
-                Body = secondArg
-                Environment = environment
-            }
-            
-            environment.Symbols[symbolName] <- func
-            
-            symbolName
-        | _ -> failwith "define must be called with two arguments"
-        
-    | List [Symbol "lambda"; parameters; body] ->
-
-        let parsedParameters =
-            match parameters with
-            | List atoms -> atoms
-            | _ -> failwith $"Expected lambda parameters to be a list of symbols"
-        
-        Atom.Lambda {
-            Parameters = parsedParameters
-            Body = body
-            Environment = environment
-        }
+    | List [Symbol "define"; firstArg; secondArg] -> define firstArg secondArg environment eval
+    | List [Symbol "lambda"; parameters; body] ->lambda parameters body environment
         
     // builtins
     | List x when List.exists (fun v -> x.Head = v) [Atom.Symbol "+"; Atom.Symbol "-"] ->
