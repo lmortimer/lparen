@@ -2,6 +2,9 @@
 open System
 open FParsec
 
+// run with: `dotnet fsi 01-ints-and-symbols.fsx`
+// https://isthisit.nz/posts/2022/a-simple-computation-engine-in-fsharp/
+
 type Atom =
     | Integer of int
     | Symbol of string
