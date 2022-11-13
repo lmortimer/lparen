@@ -14,12 +14,31 @@ let inline (-) (x: Atom) (y:Atom) =
     | (Integer x, Integer y) -> Atom.Integer (x - y)
     | _ -> failwith "Subtract only supports integers"
         
+let atomEquality (x: Atom) (y:Atom) =
+    match (x, y) with
+    | (Integer x, Integer y) -> if x = y then Atom.Boolean true else Atom.Boolean false
+    | _ -> failwith "= only supports integers"
+    
+let atomGreaterThan (x: Atom) (y:Atom) =
+    match (x, y) with
+    | (Integer x, Integer y) -> if x > y then Atom.Boolean true else Atom.Boolean false
+    | _ -> failwith "> only supports integers"
+    
+let atomLessThan (x: Atom) (y:Atom) =
+    match (x, y) with
+    | (Integer x, Integer y) -> if x < y then Atom.Boolean true else Atom.Boolean false
+    | _ -> failwith "< only supports integers"
+        
 let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
 
     match exp with
     | Integer x -> Atom.Integer x
+    | Boolean x -> Atom.Boolean x
     | List [Symbol "define"; firstArg; secondArg] -> define firstArg secondArg environment eval
-    | List [Symbol "lambda"; parameters; body] ->lambda parameters body environment
+    | List [Symbol "lambda"; parameters; body] -> lambda parameters body environment
+    | List [Symbol "="; firstArg; secondArg] -> atomEquality (eval firstArg environment) (eval secondArg environment)
+    | List [Symbol ">"; firstArg; secondArg] -> atomGreaterThan (eval firstArg environment) (eval secondArg environment)
+    | List [Symbol "<"; firstArg; secondArg] -> atomLessThan (eval firstArg environment) (eval secondArg environment)
         
     // builtins
     | List x when List.exists (fun v -> x.Head = v) [Atom.Symbol "+"; Atom.Symbol "-"] ->
