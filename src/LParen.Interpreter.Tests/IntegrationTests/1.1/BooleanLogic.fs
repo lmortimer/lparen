@@ -30,6 +30,13 @@ let ``Basic comparison methods`` () =
     evaluateAndAssertEquals "(< 2 1)" (Atom.Boolean false)
    
 [<Fact>]
+let ``if`` () =
+
+    evaluateAndAssertEquals "(if true true false)" (Atom.Boolean true)
+    evaluateAndAssertEquals "(if false true false)" (Atom.Boolean false)
+    evaluateAndAssertEquals "(if (> 1 2) (+ 100 100) (- 100 100))" (Atom.Integer 0)
+   
+[<Fact>]
 let ``Can use symbols in operations`` () =
     
     let environment: Environment = { 

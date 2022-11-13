@@ -1,8 +1,10 @@
 module LParen.Interpreter.Eval
 
+open System.Security.Cryptography
 open LParen.Interpreter.Common
 open LParen.Interpreter.SpecialForms.Define
 open LParen.Interpreter.SpecialForms.Lambda
+open LParen.Interpreter.SpecialForms.BooleanLogic
 
 let inline (+) (x: Atom) (y:Atom) =
     match (x, y) with
@@ -39,6 +41,8 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
     | List [Symbol "="; firstArg; secondArg] -> atomEquality (eval firstArg environment) (eval secondArg environment)
     | List [Symbol ">"; firstArg; secondArg] -> atomGreaterThan (eval firstArg environment) (eval secondArg environment)
     | List [Symbol "<"; firstArg; secondArg] -> atomLessThan (eval firstArg environment) (eval secondArg environment)
+    | List [Symbol "if"; predicate; consequent; alternative] -> ifForm predicate consequent alternative environment eval
+
         
     // builtins
     | List x when List.exists (fun v -> x.Head = v) [Atom.Symbol "+"; Atom.Symbol "-"] ->
