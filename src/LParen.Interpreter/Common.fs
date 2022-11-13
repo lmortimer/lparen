@@ -5,6 +5,7 @@ open System.Collections.Generic
 type Atom =
     | Integer of int
     | Symbol of string
+    | Boolean of bool
     | List of Atom list
     | Lambda of Lambda
 and

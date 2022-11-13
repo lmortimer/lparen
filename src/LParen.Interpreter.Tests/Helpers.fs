@@ -7,6 +7,7 @@ open LParen.Interpreter.Common
 open LParen.Interpreter.Parser
 open LParen.Interpreter.Eval
 
+// for use in integration tests
 let evaluateAndAssertEqualsWithEnvironment (input: string) (expectedOutput: Atom) (environment: Environment) =    
     
     let output =
@@ -18,7 +19,8 @@ let evaluateAndAssertEqualsWithEnvironment (input: string) (expectedOutput: Atom
     | Error e -> failwith e
     
     environment
-
+    
+// for use in integration tests
 let evaluateAndAssertEquals (input: string) (expectedOutput: Atom) =
     let environment: Environment = { 
         Symbols = Dictionary<Atom, Atom>()
@@ -31,3 +33,10 @@ let evaluateAndAssertEquals (input: string) (expectedOutput: Atom) =
     match output with
     | Ok output -> Assert.Equal(expectedOutput, output)
     | Error e -> failwith e
+    
+// for use in parser tests
+let parsesAndEquals (input: string) (expectedOutput: Atom) =
+    
+    lParenParser input
+    |> Result.map (fun tokens -> Assert.Equal(expectedOutput, tokens))
+    |> ignore

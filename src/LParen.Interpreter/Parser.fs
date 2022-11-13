@@ -11,11 +11,9 @@ open FParsec
 // let parseQuote =
     // skipChar '\'' >>. lispValue |>> fun x -> Unit.List [Unit.Atom "quote"; x]
 
-// let parseReserved=
-//     (pstring "Nil" >>% Unit.Nil) <|>
-//     (pstring "#t" >>% Unit.Bool true) <|>
-//     (pstring "#f" >>% Unit.Bool false) 
-
+let parseBoolean =
+    (pstring "true" >>% Atom.Boolean true) <|>
+    (pstring "false" >>% Atom.Boolean false) 
 
 let atomValue, atomValueRef = createParserForwardedToRef<Atom, unit>()
 
@@ -33,7 +31,8 @@ let parseList =
     .>> spaces .>> skipChar ')' 
     |>> Atom.List
 
-do atomValueRef.Value <- choice [ 
+do atomValueRef.Value <- choice [
+    parseBoolean
     parseSymbol
     parseInteger
     parseList
