@@ -35,20 +35,21 @@ let ``if`` () =
     evaluateAndAssertEquals "(if true true false)" (Atom.Boolean true)
     evaluateAndAssertEquals "(if false true false)" (Atom.Boolean false)
     evaluateAndAssertEquals "(if (> 1 2) (+ 100 100) (- 100 100))" (Atom.Integer 0)
-   
+    
 [<Fact>]
-let ``Can use symbols in operations`` () =
-    
-    let environment: Environment = { 
-        Symbols = Dictionary<Atom, Atom>()
-    }
-    
-    let input = "(define x 4)"
-    let expectedOutput = Atom.Symbol "x"
-    
-    let newEnvironment = evaluateAndAssertEqualsWithEnvironment input expectedOutput environment
-    
-    let additionInput = "(+ x 5)"
-    let expectedAdditionOutput = Atom.Integer 9
-    
-    evaluateAndAssertEqualsWithEnvironment additionInput expectedAdditionOutput newEnvironment
+let ``and`` () =
+    evaluateAndAssertEquals "(and true)" (Atom.Boolean true)
+    evaluateAndAssertEquals "(and false)" (Atom.Boolean false)
+    evaluateAndAssertEquals "(and true true true)" (Atom.Boolean true)
+    evaluateAndAssertEquals "(and true true false)" (Atom.Boolean false)
+    evaluateAndAssertEquals "(and (= 1 1) true)" (Atom.Boolean true)
+    evaluateAndAssertEquals "(and (= 1 2) true)" (Atom.Boolean false)
+  
+[<Fact>]
+let ``or`` () =
+    evaluateAndAssertEquals "(or true)" (Atom.Boolean true)
+    evaluateAndAssertEquals "(or false)" (Atom.Boolean false)
+    evaluateAndAssertEquals "(or true true true)" (Atom.Boolean true)
+    evaluateAndAssertEquals "(or true true false)" (Atom.Boolean true)
+    evaluateAndAssertEquals "(or (= 1 1) true)" (Atom.Boolean true)
+    evaluateAndAssertEquals "(or (= 1 2) false)" (Atom.Boolean false)  
