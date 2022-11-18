@@ -44,6 +44,7 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
     | List [Symbol "if"; predicate; consequent; alternative] -> ifForm predicate consequent alternative environment eval
     | List x when x.Head = Symbol "and" -> andForm x environment eval
     | List x when x.Head = Symbol "or" -> orForm x environment eval
+    | List x when x.Head = Symbol "cond" -> condForm x environment eval
 
         
     // builtins

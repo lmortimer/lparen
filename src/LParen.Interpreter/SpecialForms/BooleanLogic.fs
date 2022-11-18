@@ -64,3 +64,36 @@ let orForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
         |> List.reduce (||)
         
     Atom.Boolean evaluatedExpressions
+    
+// Evaluate the special form `cond`
+//
+//   (cond
+//      (<p1> <e1>)
+//      (<p2> <e2>)
+//      (<pn> <en>))
+//
+// Evaluates all <p> and <e> expressions. Returns the first <e> where <p> is true
+//
+// >> (cond (true 1) (true 2))
+// 1
+// >> (cond (false 1) (true 2))
+// 2
+// >> (cond ((false 1)) (else 2))
+// 2
+let condForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
+    
+    // ensure that these are lists of size 2
+    let conditionals =
+        parameters.Tail // head is the `cond` Symbol, skip it
+        |> List.map (fun atom ->
+            match atom with
+            | List x -> if x.Length = 2 then (x.Item(0), x.Item(1)) else failwith $"Expressions passed to cond must be lists of length 2. {atom} is not."
+            | _ -> failwith $"Expressions passed to cond must be lists. {atom} is not.")
+       
+    let evaluatedConditionals =
+        conditionals
+        |> List.map (fun (c, e) -> (eval c environment, eval e environment))
+       
+    printfn "%A" conditionals
+        
+    Atom.Boolean true
