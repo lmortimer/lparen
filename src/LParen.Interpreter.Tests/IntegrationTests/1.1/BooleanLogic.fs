@@ -52,4 +52,12 @@ let ``or`` () =
     evaluateAndAssertEquals "(or true true true)" (Atom.Boolean true)
     evaluateAndAssertEquals "(or true true false)" (Atom.Boolean true)
     evaluateAndAssertEquals "(or (= 1 1) true)" (Atom.Boolean true)
-    evaluateAndAssertEquals "(or (= 1 2) false)" (Atom.Boolean false)  
+    evaluateAndAssertEquals "(or (= 1 2) false)" (Atom.Boolean false)
+    
+[<Fact>]
+let ``cond`` () =
+    evaluateAndAssertEquals "(cond (true 1) (false 2))" (Atom.Integer 1)
+    evaluateAndAssertEquals "(cond (false 2) (true 1))" (Atom.Integer 1)
+    evaluateAndAssertEquals "(cond ((= 1 1) 1) ((= 2 2) 2))" (Atom.Integer 1)
+    evaluateAndAssertEquals "(cond ((= 1 1) (+ 0 1)) ((= 2 2) (+ 0 2)))" (Atom.Integer 1)
+ 

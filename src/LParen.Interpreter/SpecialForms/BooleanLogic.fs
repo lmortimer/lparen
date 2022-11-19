@@ -1,5 +1,6 @@
 module LParen.Interpreter.SpecialForms.BooleanLogic
 
+open System
 open LParen.Interpreter.Common
 
 
@@ -41,6 +42,26 @@ let andForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
         
     Atom.Boolean evaluatedExpressions
     
+let andFormShortCircuit (parameters: Atom list) (environment: Environment) (eval: Eval) =
+    
+    // evaluate the atoms in parameters one by one. We stop when we get to the first false
+    let hasAFalsyExpression =
+        parameters.Tail // head is the `and` Symbol, skip it
+        |> List.tryFind (fun atom ->
+            let evaluatedExpr = eval atom environment
+            
+            // tryFind requires the predicate function to return true when it should stop
+            // confusingly this is when the atom evaluates to false
+            match evaluatedExpr with
+            | Atom.Boolean b when b = false -> true
+            | Atom.Boolean b when b = true -> false
+            | _ -> failwith $"Expressions passed to the and must evaluate to a boolean. {atom} does not.")
+        
+    // hasAFalsyExpression contains the first expression that evaluate to false, or None if all expressions were true 
+    match hasAFalsyExpression with
+    | Some _ -> Atom.Boolean false
+    | None -> Atom.Boolean true
+    
 // Evaluate the special form `or`
 //
 //   (or <e1> <e2> .... <en> )
@@ -51,7 +72,7 @@ let andForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
 // >> (or true true true true)
 // true
 // >> (and false true)
-// false
+// true
 let orForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
     
     let evaluatedExpressions =
@@ -60,10 +81,30 @@ let orForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
         |> List.map (fun atom ->
             match atom with
             | Boolean x -> x
-            | _ -> failwith $"Expressions passed to the and must evaluate to a boolean. {atom} does not.")
+            | _ -> failwith $"Expressions passed to `and` must evaluate to a boolean. {atom} does not.")
         |> List.reduce (||)
         
     Atom.Boolean evaluatedExpressions
+    
+let orFormShortCircuit (parameters: Atom list) (environment: Environment) (eval: Eval) =
+    
+    // evaluate the atoms in parameters one by one. We stop when we get to the first true
+    let hasATrueExpression =
+        parameters.Tail // head is the `and` Symbol, skip it
+        |> List.tryFind (fun atom ->
+            let evaluatedExpr = eval atom environment
+            
+            // tryFind requires the predicate function to return true when it should stop
+            // for `or`, that's when we see the first Atom.Boolean true
+            match evaluatedExpr with
+            | Atom.Boolean b when b = true -> true
+            | Atom.Boolean b when b = false -> false
+            | _ -> failwith $"Expressions passed to `or` must evaluate to a boolean. {atom} does not.")
+        
+    // hasAFalsyExpression contains the first expression that evaluated to true, or None if all expressions were false 
+    match hasATrueExpression with
+    | Some _ -> Atom.Boolean true
+    | None -> Atom.Boolean false
     
 // Evaluate the special form `cond`
 //
@@ -73,27 +114,31 @@ let orForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
 //      (<pn> <en>))
 //
 // Evaluates all <p> and <e> expressions. Returns the first <e> where <p> is true
+// Note: Scheme spec has `else`, this does not
 //
 // >> (cond (true 1) (true 2))
 // 1
 // >> (cond (false 1) (true 2))
 // 2
-// >> (cond ((false 1)) (else 2))
-// 2
 let condForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
     
     // ensure that these are lists of size 2
-    let conditionals =
+    let predicateThatEvaluatesToTrue =
         parameters.Tail // head is the `cond` Symbol, skip it
-        |> List.map (fun atom ->
+        |> List.map (fun atom -> // ensure the syntax form is correct, pairs of lists
             match atom with
             | List x -> if x.Length = 2 then (x.Item(0), x.Item(1)) else failwith $"Expressions passed to cond must be lists of length 2. {atom} is not."
             | _ -> failwith $"Expressions passed to cond must be lists. {atom} is not.")
-       
-    let evaluatedConditionals =
-        conditionals
-        |> List.map (fun (c, e) -> (eval c environment, eval e environment))
-       
-    printfn "%A" conditionals
+        |> List.tryFind (fun (predicate, _) -> // now search for the first predicate that evaluates to true
+            let evaluatedPredicate = eval predicate environment
+            
+            match evaluatedPredicate with
+            | Atom.Boolean b when b = true -> true
+            | Atom.Boolean b when b = false -> false
+            | _ -> failwith $"Predicate passed to `cond` must evaluate to a boolean. {predicate} does not.")
         
-    Atom.Boolean true
+    // hasAFalsyExpression contains the first expression that evaluated to true, or None if all expressions were false 
+    match predicateThatEvaluatesToTrue with
+    | Some(_, expression) -> eval expression environment
+    | None -> failwith "Nothing in cond evaluated to true"
+        
