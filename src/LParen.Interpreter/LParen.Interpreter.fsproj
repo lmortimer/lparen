@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +14,6 @@
     <Compile Include="Library\BooleanLogic.fs" />
     <Compile Include="Library\Math.fs" />
     <Compile Include="Eval.fs" />
-    <Compile Include="Program.fs" />
   </ItemGroup>
   
   <ItemGroup>

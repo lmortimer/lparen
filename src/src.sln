@@ -7,6 +7,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LParen.Interpreter", "LPare
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LParen.Interpreter.Tests", "LParen.Interpreter.Tests\LParen.Interpreter.Tests.fsproj", "{DAD02F4A-9B9E-4863-B731-1F5AEAF80643}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "LParen.Exe", "LParen.Exe\LParen.Exe.fsproj", "{15D2383E-765D-4F10-BFA1-FB6E65668B3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{DAD02F4A-9B9E-4863-B731-1F5AEAF80643}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAD02F4A-9B9E-4863-B731-1F5AEAF80643}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAD02F4A-9B9E-4863-B731-1F5AEAF80643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15D2383E-765D-4F10-BFA1-FB6E65668B3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15D2383E-765D-4F10-BFA1-FB6E65668B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15D2383E-765D-4F10-BFA1-FB6E65668B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15D2383E-765D-4F10-BFA1-FB6E65668B3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
