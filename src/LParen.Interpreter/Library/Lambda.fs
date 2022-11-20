@@ -1,4 +1,4 @@
-module LParen.Interpreter.SpecialForms.Lambda
+module LParen.Interpreter.Library.Lambda
 
 open LParen.Interpreter.Common
 

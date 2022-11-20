@@ -8,9 +8,10 @@
   <ItemGroup>
     <Compile Include="Common.fs" />
     <Compile Include="Parser.fs" />
-    <Compile Include="SpecialForms/Define.fs" />
-    <Compile Include="SpecialForms/Lambda.fs" />
-    <Compile Include="SpecialForms/BooleanLogic.fs" />
+    <Compile Include="Library\Define.fs" />
+    <Compile Include="Library\Lambda.fs" />
+    <Compile Include="Library\BooleanLogic.fs" />
+    <Compile Include="Library\Math.fs" />
     <Compile Include="Eval.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

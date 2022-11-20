@@ -1,4 +1,4 @@
-module LParen.Interpreter.SpecialForms.Define
+module LParen.Interpreter.Library.Define
 
 open LParen.Interpreter.Common
 

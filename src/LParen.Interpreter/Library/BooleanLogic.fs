@@ -1,4 +1,4 @@
-module LParen.Interpreter.SpecialForms.BooleanLogic
+module LParen.Interpreter.Library.BooleanLogic
 
 open System
 open LParen.Interpreter.Common
