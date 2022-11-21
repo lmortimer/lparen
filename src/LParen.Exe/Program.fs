@@ -18,9 +18,7 @@ let main argv =
     let results = parser.ParseCommandLine argv
     
     let filePath = results.TryGetResult(Arguments.File)
-             
-    printfn "file path %A" filePath
-    
+
     match filePath with
     | Some path -> executeFile path
     | None -> repl()

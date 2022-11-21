@@ -38,10 +38,13 @@ do atomValueRef.Value <- choice [
     parseList
 ]
 
+
+let parseSingleExpression = spaces >>. atomValue .>> spaces
+
+let parseManyExpressions = many parseSingleExpression
+
 let lParenParser str =
-    let languageParser = spaces >>. many atomValue .>> spaces
     
-    match run languageParser str with
-    | Success (h::_, _, _) -> Microsoft.FSharp.Core.Ok h
+    match run parseManyExpressions str with
+    | Success (h, _, _) -> Microsoft.FSharp.Core.Ok h
     | Failure (errorMsg, _, _) -> Microsoft.FSharp.Core.Error errorMsg
-    | _ -> failwith "Shouldn't be here"

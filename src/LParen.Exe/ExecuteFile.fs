@@ -1,13 +1,14 @@
 module LParen.Exe.ExecuteFile
 
 open System.IO
-open System
 open System.Collections.Generic
 
 open LParen.Interpreter.Common
 open LParen.Interpreter.Parser
 open LParen.Interpreter.Eval
 
+// Execute a file by path. Evaluates all expressions in the file and only prints the
+// result of the last expression
 let executeFile (filename: string) =
     
     let global_environment: Environment = { 
@@ -15,13 +16,16 @@ let executeFile (filename: string) =
     }
     
     let contents = File.ReadAllText(filename)
-    
-    printfn "%A" contents
-    
+        
     try
         lParenParser contents
-        |> Result.map (fun tokens -> printfn $"{tokens}";) //eval tokens global_environment)
-        |> Result.map (fun s -> printfn $"{s}")
+        |> Result.map (fun expressionsToExecute ->
+            expressionsToExecute
+            |> List.map (fun expr -> eval expr global_environment)
+            |> List.tryLast
+            |> Option.map (fun f -> printfn "%A" f)
+        )
+
         |> ignore
     with
         | ex -> printfn $"Error: {ex.Message}"
