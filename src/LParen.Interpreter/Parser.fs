@@ -43,8 +43,16 @@ let parseSingleExpression = spaces >>. atomValue .>> spaces
 
 let parseManyExpressions = many parseSingleExpression
 
+// for general use of the language
 let lParenParser str =
     
     match run parseManyExpressions str with
+    | Success (h, _, _) -> Microsoft.FSharp.Core.Ok h
+    | Failure (errorMsg, _, _) -> Microsoft.FSharp.Core.Error errorMsg
+
+// used in testing
+let singleExpressionParser str =
+    
+    match run parseSingleExpression str with
     | Success (h, _, _) -> Microsoft.FSharp.Core.Ok h
     | Failure (errorMsg, _, _) -> Microsoft.FSharp.Core.Error errorMsg

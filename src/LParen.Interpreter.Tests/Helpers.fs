@@ -8,10 +8,10 @@ open LParen.Interpreter.Parser
 open LParen.Interpreter.Eval
 
 // for use in integration tests
-let evaluateAndAssertEqualsWithEnvironment (input: string) (expectedOutput: Atom) (environment: Environment) =    
+let evaluateSingleExpressionAndAssertEqualsWithEnvironment (input: string) (expectedOutput: Atom) (environment: Environment) =    
     
     let output =
-        lParenParser input
+        singleExpressionParser input
         |> Result.map (fun tokens -> eval tokens environment)
         
     match output with
@@ -21,13 +21,13 @@ let evaluateAndAssertEqualsWithEnvironment (input: string) (expectedOutput: Atom
     environment
     
 // for use in integration tests
-let evaluateAndAssertEquals (input: string) (expectedOutput: Atom) =
+let evaluateSinglExpressionAndAssertEquals (input: string) (expectedOutput: Atom) =
     let environment: Environment = { 
         Symbols = Dictionary<Atom, Atom>()
     }
     
     let output =
-        lParenParser input
+        singleExpressionParser input
         |> Result.map (fun tokens -> eval tokens environment)
         
     match output with
@@ -37,6 +37,6 @@ let evaluateAndAssertEquals (input: string) (expectedOutput: Atom) =
 // for use in parser tests
 let parsesAndEquals (input: string) (expectedOutput: Atom) =
     
-    lParenParser input
+    singleExpressionParser input
     |> Result.map (fun tokens -> Assert.Equal(expectedOutput, tokens))
     |> ignore

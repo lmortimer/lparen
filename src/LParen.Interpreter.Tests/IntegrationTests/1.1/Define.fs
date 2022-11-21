@@ -16,12 +16,12 @@ let ``Can define symbols`` () =
     let input = "(define x 4)"
     let expectedOutput = Atom.Symbol "x"
     
-    let newEnvironment = evaluateAndAssertEqualsWithEnvironment input expectedOutput environment
+    let newEnvironment = evaluateSingleExpressionAndAssertEqualsWithEnvironment input expectedOutput environment
     
     let xInput = "x"
     let expectedXOutput = Atom.Integer 4
     
-    evaluateAndAssertEqualsWithEnvironment xInput expectedXOutput newEnvironment
+    evaluateSingleExpressionAndAssertEqualsWithEnvironment xInput expectedXOutput newEnvironment
    
    
 [<Fact>]
@@ -34,12 +34,12 @@ let ``Can use symbols in operations`` () =
     let input = "(define x 4)"
     let expectedOutput = Atom.Symbol "x"
     
-    let newEnvironment = evaluateAndAssertEqualsWithEnvironment input expectedOutput environment
+    let newEnvironment = evaluateSingleExpressionAndAssertEqualsWithEnvironment input expectedOutput environment
     
     let additionInput = "(+ x 5)"
     let expectedAdditionOutput = Atom.Integer 9
     
-    evaluateAndAssertEqualsWithEnvironment additionInput expectedAdditionOutput newEnvironment
+    evaluateSingleExpressionAndAssertEqualsWithEnvironment additionInput expectedAdditionOutput newEnvironment
     
 [<Fact>]
 let ``Can define functions`` () =
@@ -51,9 +51,9 @@ let ``Can define functions`` () =
     let input = "(define (add x y) (+ x y))"
     let expectedOutput = Atom.Symbol "add"
     
-    let newEnvironment = evaluateAndAssertEqualsWithEnvironment input expectedOutput environment
+    let newEnvironment = evaluateSingleExpressionAndAssertEqualsWithEnvironment input expectedOutput environment
     
     let additionInput = "(add 1 2)"
     let expectedAdditionOutput = Atom.Integer 3
     
-    evaluateAndAssertEqualsWithEnvironment additionInput expectedAdditionOutput newEnvironment
+    evaluateSingleExpressionAndAssertEqualsWithEnvironment additionInput expectedAdditionOutput newEnvironment
