@@ -25,3 +25,10 @@ let ``Can parse Booleans`` () =
     
     parsesAndEquals "true" (Atom.Boolean true)
     parsesAndEquals "false" (Atom.Boolean false)
+    
+[<Fact>]
+let ``Can parse lists`` () =
+    
+    parsesAndEquals "(hello)" (Atom.List [Atom.Symbol "hello"])
+    parsesAndEquals "(+ 1 1)" (Atom.List [Atom.Symbol "+"; Atom.Integer 1; Atom.Integer 1])
+    parsesAndEquals "(+ 1 (+ 2 2))" (Atom.List [Atom.Symbol "+"; Atom.Integer 1; Atom.List [Atom.Symbol "+"; Atom.Integer 2; Atom.Integer 2]])
