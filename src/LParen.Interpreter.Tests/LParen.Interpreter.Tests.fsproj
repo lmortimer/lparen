@@ -13,6 +13,7 @@
     <Compile Include="IntegrationTests\1.1\Define.fs" />
     <Compile Include="IntegrationTests\1.1\BooleanLogic.fs" />
     <Compile Include="Parser\ParsePrimitives.fs" />
+    <Compile Include="Parser\ParseLanguage.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
