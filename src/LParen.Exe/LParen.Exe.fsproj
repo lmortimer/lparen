@@ -10,6 +10,7 @@
         <Compile Include="ExecuteFile.fs" />
         <Compile Include="Program.fs" />
         <Content Include="Examples\newton-square-root.scm" />
+        <Content Include="Examples\fibonacci-numbers.scm" />
     </ItemGroup>
 
     <ItemGroup>
