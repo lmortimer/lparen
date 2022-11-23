@@ -141,5 +141,5 @@ let condForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
     // or None if all predicate were false 
     match predicateThatEvaluatesToTrue with
     | Some(_, expression) -> eval expression environment
-    | None -> failwith "Nothing in cond evaluated to true"
+    | None -> failwith "No predicate passed to `cond` evaluated to true."
            
