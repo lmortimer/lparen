@@ -1,6 +1,4 @@
 module LParen.Interpreter.Library.BooleanLogic
-
-open System
 open LParen.Interpreter.Common
 
 
@@ -122,23 +120,26 @@ let orFormShortCircuit (parameters: Atom list) (environment: Environment) (eval:
 // 2
 let condForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
     
-    // ensure that these are lists of size 2
     let predicateThatEvaluatesToTrue =
         parameters.Tail // head is the `cond` Symbol, skip it
-        |> List.map (fun atom -> // ensure the syntax form is correct, pairs of lists
-            match atom with
-            | List x -> if x.Length = 2 then (x.Item(0), x.Item(1)) else failwith $"Expressions passed to cond must be lists of length 2. {atom} is not."
-            | _ -> failwith $"Expressions passed to cond must be lists. {atom} is not.")
+        |> List.chunkBySize 2 // chunk to lists intending to be [<p>; <e>]
+        |> List.concat
+        |> List.map (fun clause -> // ensure those lists actually are [<p>; <e>]
+            match clause with
+            | List atoms when atoms.Length = 2 -> (atoms.Item(0), atoms.Item(1))
+            | _ -> failwith $"Expected clause in `cond` to be (<predicate> <expression). Instead received: ${clause}")
         |> List.tryFind (fun (predicate, _) -> // now search for the first predicate that evaluates to true
+           
             let evaluatedPredicate = eval predicate environment
             
             match evaluatedPredicate with
-            | Atom.Boolean b when b = true -> true
+            | Atom.Boolean b when b = true -> true // tryFind returns true on this
             | Atom.Boolean b when b = false -> false
             | _ -> failwith $"Predicate passed to `cond` must evaluate to a boolean. {predicate} does not.")
         
-    // hasAFalsyExpression contains the first expression that evaluated to true, or None if all expressions were false 
+    // predicateThatEvaluatesToTrue contains the expression for the predicate that evaluated to true
+    // or None if all predicate were false 
     match predicateThatEvaluatesToTrue with
     | Some(_, expression) -> eval expression environment
     | None -> failwith "Nothing in cond evaluated to true"
-        
+           

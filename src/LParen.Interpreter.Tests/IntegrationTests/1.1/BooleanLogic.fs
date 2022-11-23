@@ -59,5 +59,4 @@ let ``cond`` () =
     evaluateSinglExpressionAndAssertEquals "(cond (true 1) (false 2))" (Atom.Integer 1)
     evaluateSinglExpressionAndAssertEquals "(cond (false 2) (true 1))" (Atom.Integer 1)
     evaluateSinglExpressionAndAssertEquals "(cond ((= 1 1) 1) ((= 2 2) 2))" (Atom.Integer 1)
-    evaluateSinglExpressionAndAssertEquals "(cond ((= 1 1) (+ 0 1)) ((= 2 2) (+ 0 2)))" (Atom.Integer 1)
- 
+    evaluateSinglExpressionAndAssertEquals "(cond ((= 1 2) (+ 0 1)) ((= 2 2) (+ 0 2)))" (Atom.Integer 2)
