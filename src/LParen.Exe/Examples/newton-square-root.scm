@@ -1,5 +1,16 @@
-(define x 
-  100)
-(define y 200)
+(define good-enough?
+  (lambda (guess x)
+    (< (abs (- (square guess x) x)))))
 
-(+ x y)
+(define improve
+  (lambda (guess x)
+    (average guess (/ x guess))))
+
+(define sqrt-iter
+  (lambda (guess x)
+    (cond ((good-enough? guess x) guess)
+          ((true) (sqrt-iter (improve guess x) x)))))
+
+(define sqrt
+  (lambda (n)
+    (sqrt-iter 1.0 x)))
