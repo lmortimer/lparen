@@ -2,7 +2,7 @@ module LParen.Interpreter.Library.BooleanLogic
 open LParen.Interpreter.Common
 
 
-// Evaluate the special form `define`.
+// Evaluate the special form `if`.
 //
 // (if <predicate> <consequent> <alternative>)
 //
@@ -28,9 +28,9 @@ let ifForm (predicate: Atom) (consequent: Atom) (alternative: Atom) (environment
 // true
 // >> (and false)
 // false
-let andForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
+let andForm (expressions: Atom list) (environment: Environment) (eval: Eval) =
     let evaluatedExpressions =
-        parameters.Tail // head is the `and` Symbol, skip it
+        expressions
         |> List.map (fun atom -> eval atom environment)
         |> List.map (fun atom ->
             match atom with
@@ -40,11 +40,11 @@ let andForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
         
     Atom.Boolean evaluatedExpressions
     
-let andFormShortCircuit (parameters: Atom list) (environment: Environment) (eval: Eval) =
+let andFormShortCircuit (expressions: Atom list) (environment: Environment) (eval: Eval) =
     
     // evaluate the atoms in parameters one by one. We stop when we get to the first false
     let hasAFalsyExpression =
-        parameters.Tail // head is the `and` Symbol, skip it
+        expressions
         |> List.tryFind (fun atom ->
             let evaluatedExpr = eval atom environment
             
@@ -71,10 +71,10 @@ let andFormShortCircuit (parameters: Atom list) (environment: Environment) (eval
 // true
 // >> (and false true)
 // true
-let orForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
+let orForm (expressions: Atom list) (environment: Environment) (eval: Eval) =
     
     let evaluatedExpressions =
-        parameters.Tail // head is the `or` Symbol, skip it
+        expressions
         |> List.map (fun atom -> eval atom environment)
         |> List.map (fun atom ->
             match atom with
@@ -84,11 +84,11 @@ let orForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
         
     Atom.Boolean evaluatedExpressions
     
-let orFormShortCircuit (parameters: Atom list) (environment: Environment) (eval: Eval) =
+let orFormShortCircuit (expressions: Atom list) (environment: Environment) (eval: Eval) =
     
     // evaluate the atoms in parameters one by one. We stop when we get to the first true
     let hasATrueExpression =
-        parameters.Tail // head is the `and` Symbol, skip it
+        expressions
         |> List.tryFind (fun atom ->
             let evaluatedExpr = eval atom environment
             
@@ -121,7 +121,7 @@ let orFormShortCircuit (parameters: Atom list) (environment: Environment) (eval:
 let condForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
     
     let predicateThatEvaluatesToTrue =
-        parameters.Tail // head is the `cond` Symbol, skip it
+        parameters
         |> List.chunkBySize 2 // chunk to lists intending to be [<p>; <e>]
         |> List.concat
         |> List.map (fun clause -> // ensure those lists actually are [<p>; <e>]

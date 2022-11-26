@@ -17,9 +17,9 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
     | List [Symbol ">"; firstArg; secondArg] -> atomGreaterThan (eval firstArg environment) (eval secondArg environment)
     | List [Symbol "<"; firstArg; secondArg] -> atomLessThan (eval firstArg environment) (eval secondArg environment)
     | List [Symbol "if"; predicate; consequent; alternative] -> ifForm predicate consequent alternative environment eval
-    | List x when x.Head = Symbol "and" -> andFormShortCircuit x environment eval
-    | List x when x.Head = Symbol "or" -> orFormShortCircuit x environment eval
-    | List x when x.Head = Symbol "cond" -> condForm x environment eval
+    | List x when x.Head = Symbol "and" -> andFormShortCircuit x.Tail environment eval
+    | List x when x.Head = Symbol "or" -> orFormShortCircuit x.Tail environment eval
+    | List x when x.Head = Symbol "cond" -> condForm x.Tail environment eval
 
         
     // builtins
