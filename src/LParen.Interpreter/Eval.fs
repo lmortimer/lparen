@@ -1,5 +1,6 @@
 module LParen.Interpreter.Eval
 
+open System.Collections.Generic
 open LParen.Interpreter.Common
 open LParen.Interpreter.Environment
 open LParen.Interpreter.Library.Define
@@ -44,27 +45,35 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
         let symbol = x.Head
         let args = x.Tail
         
+        printfn $"Calling {symbol} with {args}"
+        
         // find the lambda we previously defined
         let callable =
-            match environment.Symbols.ContainsKey(symbol) with
-            | true -> environment.Symbols[symbol]
-            | false -> failwith $"Could not locate callable symbol {symbol}"
+            match find symbol environment with
+            | Some symbol -> symbol
+            | None -> failwith $"Could not locate callable symbol {symbol}"
         
         // evaluate the arguments being passed into the function call, these may themselves be lambda calls
         let evaluatedArgs =
             args
             |> List.map (fun atom -> eval atom environment)
         
-        // to the global environment we assign the keys of the lambda's parameter symbols
-        // with the evaluatedArgs passed in the function call. we match these by order.
-        // then call the function itself 
+        // when executing a lambda we create its own environment (execution context) so that
+        // symbols local to the lambda don't pollute anything higher in the stack.
+        // we assign the keys of the lambda's parameter symbols with the evaluatedArgs passed
+        // in the function call. we match these by order then call the function itself
+        let newEnvironment: Environment = { 
+            Symbols = Dictionary<Atom, Atom>()
+            Parent = Some environment // the parent environment
+        }
+        
         match callable with
         | Lambda lambda ->
             
             List.zip lambda.Parameters evaluatedArgs
             |> List.iter (fun (parameter, value) ->
-                environment.Symbols[parameter] <- value)
+                newEnvironment.Symbols[parameter] <- value)
             
-            eval lambda.Body environment
+            eval lambda.Body newEnvironment
         | _ -> failwith $"Symbol {symbol} is not callable"
     | Lambda x -> failwith $"Lambda with {x}"

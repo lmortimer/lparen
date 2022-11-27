@@ -7,4 +7,4 @@ REPL:
 
 Execute a file:
 
-    dotnet run --project src/LParen.Exe -- --file src/LParen.Exe/Examples/newton-square-root.scm
+    dotnet run --project src/LParen.Exe -- --file src/LParen.Exe/Examples/fibonacci-numbers.scm
