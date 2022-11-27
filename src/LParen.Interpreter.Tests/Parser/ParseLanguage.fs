@@ -4,7 +4,6 @@ open Xunit
 
 open LParen.Interpreter.Common
 open LParen.Interpreter.Parser
-open LParen.Interpreter.Tests.Helpers
 
 [<Fact>]
 let ``Single expression parses to larger lists`` () =

@@ -17,6 +17,7 @@ and
 and 
     Environment = {
         Symbols: Dictionary<Atom, Atom>
+        Parent: Environment option
     }
 
 // Evaluates an Atom in an Environment

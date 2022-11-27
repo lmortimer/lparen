@@ -12,6 +12,7 @@ open LParen.Interpreter.Eval
 let repl () =
     let global_environment: Environment = { 
         Symbols = Dictionary<Atom, Atom>()
+        Parent = None
     }
                 
     while true do

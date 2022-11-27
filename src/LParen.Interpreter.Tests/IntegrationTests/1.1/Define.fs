@@ -11,6 +11,7 @@ let ``Can define symbols`` () =
     
     let environment: Environment = { 
         Symbols = Dictionary<Atom, Atom>()
+        Parent = None
     }
     
     let input = "(define x 4)"
@@ -29,6 +30,7 @@ let ``Can use symbols in operations`` () =
     
     let environment: Environment = { 
         Symbols = Dictionary<Atom, Atom>()
+        Parent = None
     }
     
     let input = "(define x 4)"
@@ -46,6 +48,7 @@ let ``Can define functions`` () =
     
     let environment: Environment = { 
         Symbols = Dictionary<Atom, Atom>()
+        Parent = None
     }
     
     let input = "(define (add x y) (+ x y))"

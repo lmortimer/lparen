@@ -13,6 +13,7 @@ let executeFile (filename: string) =
     
     let global_environment: Environment = { 
         Symbols = Dictionary<Atom, Atom>()
+        Parent = None
     }
     
     let contents = File.ReadAllText(filename)

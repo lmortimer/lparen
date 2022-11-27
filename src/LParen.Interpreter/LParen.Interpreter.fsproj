@@ -9,6 +9,7 @@
   <ItemGroup>
     <Compile Include="Common.fs" />
     <Compile Include="Parser.fs" />
+    <Compile Include="Environment.fs" />
     <Compile Include="Library\Define.fs" />
     <Compile Include="Library\Lambda.fs" />
     <Compile Include="Library\BooleanLogic.fs" />

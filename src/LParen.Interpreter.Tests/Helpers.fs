@@ -24,6 +24,7 @@ let evaluateSingleExpressionAndAssertEqualsWithEnvironment (input: string) (expe
 let evaluateSingleExpressionAndAssertEquals (input: string) (expectedOutput: Atom) =
     let environment: Environment = { 
         Symbols = Dictionary<Atom, Atom>()
+        Parent = None
     }
     
     let output =

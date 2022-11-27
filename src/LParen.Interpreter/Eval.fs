@@ -1,6 +1,7 @@
 module LParen.Interpreter.Eval
 
 open LParen.Interpreter.Common
+open LParen.Interpreter.Environment
 open LParen.Interpreter.Library.Define
 open LParen.Interpreter.Library.Lambda
 open LParen.Interpreter.Library.BooleanLogic
@@ -35,9 +36,9 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
         |> List.reduce operator
     // user defined symbols
     | Symbol s ->
-        match environment.Symbols.ContainsKey(Symbol s) with
-        | true -> environment.Symbols[Symbol s]
-        | false -> failwith $"Could not locate symbol {s}"
+        match find (Symbol s) environment with
+        | Some symbol -> symbol
+        | None -> failwith $"Could not locate symbol {s}"
     // call a lambda    
     | List x ->
         let symbol = x.Head

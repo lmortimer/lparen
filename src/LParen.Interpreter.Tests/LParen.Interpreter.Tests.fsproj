@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Compile Include="Helpers.fs" />
+    <Compile Include="Environment.fs" />
     <Compile Include="IntegrationTests\1.1\SimpleMath.fs" />
     <Compile Include="IntegrationTests\1.1\Define.fs" />
     <Compile Include="IntegrationTests\1.1\BooleanLogic.fs" />
