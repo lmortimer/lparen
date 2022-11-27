@@ -2,17 +2,14 @@ module LParen.Interpreter.Tests.IntegrationTests._1._1.Define
 
 open Xunit
 
-open System.Collections.Generic
 open LParen.Interpreter.Common
+open LParen.Interpreter.Environment
 open LParen.Interpreter.Tests.Helpers
     
 [<Fact>]
 let ``Can define symbols`` () =
     
-    let environment: Environment = { 
-        Symbols = Dictionary<Atom, Atom>()
-        Parent = None
-    }
+    let environment = createEnvironment()
     
     let input = "(define x 4)"
     let expectedOutput = Atom.Symbol "x"
@@ -28,10 +25,7 @@ let ``Can define symbols`` () =
 [<Fact>]
 let ``Can use symbols in operations`` () =
     
-    let environment: Environment = { 
-        Symbols = Dictionary<Atom, Atom>()
-        Parent = None
-    }
+    let environment = createEnvironment()
     
     let input = "(define x 4)"
     let expectedOutput = Atom.Symbol "x"
@@ -46,10 +40,7 @@ let ``Can use symbols in operations`` () =
 [<Fact>]
 let ``Can define functions`` () =
     
-    let environment: Environment = { 
-        Symbols = Dictionary<Atom, Atom>()
-        Parent = None
-    }
+    let environment = createEnvironment()
     
     let input = "(define (add x y) (+ x y))"
     let expectedOutput = Atom.Symbol "add"

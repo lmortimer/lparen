@@ -62,18 +62,15 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
         // symbols local to the lambda don't pollute anything higher in the stack.
         // we assign the keys of the lambda's parameter symbols with the evaluatedArgs passed
         // in the function call. we match these by order then call the function itself
-        let newEnvironment: Environment = { 
-            Symbols = Dictionary<Atom, Atom>()
-            Parent = Some environment // the parent environment
-        }
+        let lambdaEnvironment = createEnvironmentWithParent environment
         
         match callable with
         | Lambda lambda ->
             
             List.zip lambda.Parameters evaluatedArgs
             |> List.iter (fun (parameter, value) ->
-                newEnvironment.Symbols[parameter] <- value)
+                lambdaEnvironment.Symbols[parameter] <- value)
             
-            eval lambda.Body newEnvironment
+            eval lambda.Body lambdaEnvironment
         | _ -> failwith $"Symbol {symbol} is not callable"
     | Lambda x -> failwith $"Lambda with {x}"

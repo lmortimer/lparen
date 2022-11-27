@@ -1,9 +1,9 @@
 module LParen.Interpreter.Tests.Helpers
 
 open Xunit
-open System.Collections.Generic
 
 open LParen.Interpreter.Common
+open LParen.Interpreter.Environment
 open LParen.Interpreter.Parser
 open LParen.Interpreter.Eval
 
@@ -22,10 +22,7 @@ let evaluateSingleExpressionAndAssertEqualsWithEnvironment (input: string) (expe
     
 // for use in integration tests
 let evaluateSingleExpressionAndAssertEquals (input: string) (expectedOutput: Atom) =
-    let environment: Environment = { 
-        Symbols = Dictionary<Atom, Atom>()
-        Parent = None
-    }
+    let environment = createEnvironment()
     
     let output =
         singleExpressionParser input

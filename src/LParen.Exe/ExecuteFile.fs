@@ -1,9 +1,8 @@
 module LParen.Exe.ExecuteFile
 
 open System.IO
-open System.Collections.Generic
 
-open LParen.Interpreter.Common
+open LParen.Interpreter.Environment
 open LParen.Interpreter.Parser
 open LParen.Interpreter.Eval
 
@@ -11,10 +10,7 @@ open LParen.Interpreter.Eval
 // result of the last expression
 let executeFile (filename: string) =
     
-    let global_environment: Environment = { 
-        Symbols = Dictionary<Atom, Atom>()
-        Parent = None
-    }
+    let global_environment = createEnvironment()
     
     let contents = File.ReadAllText(filename)
         
