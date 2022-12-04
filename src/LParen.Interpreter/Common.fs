@@ -16,7 +16,7 @@ and
     }
 and 
     Environment = {
-        Symbols: Dictionary<Atom, Atom>
+        Symbols: Dictionary<string, Atom>
         Parent: Environment option
     }
 

@@ -9,7 +9,7 @@ open LParen.Interpreter.Environment
 let ``Can set and and find symbol in local environment`` () =
     let environment = createEnvironment()
     
-    environment.Symbols.Add(Symbol "Foo", Symbol "Bar")
+    environment.Symbols.Add("Foo", Symbol "Bar")
     
     Assert.Equal(Some (Symbol "Bar"), find (Symbol "Foo") environment)
     
@@ -25,7 +25,7 @@ let ``Find locates symbol in parent environment`` () =
     
     let childEnvironment = createEnvironmentWithParent parentEnvironment
     
-    parentEnvironment.Symbols.Add(Symbol "Foo", Symbol "Bar")
+    parentEnvironment.Symbols.Add("Foo", Symbol "Bar")
     
     Assert.Equal(Some (Symbol "Bar"), find (Symbol "Foo") childEnvironment)
     
@@ -35,7 +35,7 @@ let ``Find returns lowest level environment symbol`` () =
     
     let childEnvironment = createEnvironmentWithParent parentEnvironment
     
-    childEnvironment.Symbols.Add(Symbol "Foo", Symbol "Barchild")
-    parentEnvironment.Symbols.Add(Symbol "Foo", Symbol "Barparent")
+    childEnvironment.Symbols.Add("Foo", Symbol "Barchild")
+    parentEnvironment.Symbols.Add("Foo", Symbol "Barparent")
     
     Assert.Equal(Some (Symbol "Barchild"), find (Symbol "Foo") childEnvironment)

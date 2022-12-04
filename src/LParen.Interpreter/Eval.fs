@@ -67,7 +67,11 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
             
             List.zip lambda.Parameters evaluatedArgs
             |> List.iter (fun (parameter, value) ->
-                lambdaEnvironment.Symbols[parameter] <- value)
+                let parameterName =
+                    match parameter with      // add
+                    | Symbol s -> s
+                    | _ -> failwith $"Lambda parameter Symbols are expected to be Atom.Symbol. Instead got: {parameter} = {value}"
+                lambdaEnvironment.Symbols[parameterName] <- value)
             
             eval lambda.Body lambdaEnvironment
         | _ -> failwith $"Symbol {symbol} is not callable"

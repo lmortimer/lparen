@@ -12,10 +12,16 @@ let define (firstArg: Atom) (secondArg:Atom) (environment: Environment) (eval: E
     match firstArg with
     
     // 1. assigning a value to a symbol. eg: (define x 100)
-    | Symbol s -> 
-        let symbol = firstArg   // x
+    | Symbol s ->
+        
+        let symbol = firstArg // x
+        let symbolName = // x
+            match symbol with
+            | Symbol s -> s
+            | _ -> failwith $"define expects the symbol name to be an Atom.Symbol. Instead got value: {firstArg}"
+            
         let value = secondArg   // 100
-        environment.Symbols[symbol] <- eval value environment
+        environment.Symbols[symbolName] <- eval value environment
         symbol
     // 2. defining a function. eg: (define (add x y) (+ x y))
     | List _ ->
@@ -26,7 +32,12 @@ let define (firstArg: Atom) (secondArg:Atom) (environment: Environment) (eval: E
             | List atoms -> atoms
             | _ -> failwith $"First argument to define expected to be a list of Atoms"
     
-        let symbol = parsedFirstArg.Head       // add
+        let symbol = parsedFirstArg.Head // add
+        let symbolName =
+            match symbol with      // add
+            | Symbol s -> s
+            | _ -> failwith $"define expects the symbol name to be an Atom.Symbol. Instead got value: {firstArg}"
+            
         let parameters = parsedFirstArg.Tail // [x; y]
                
         let func = Atom.Lambda {
@@ -35,7 +46,7 @@ let define (firstArg: Atom) (secondArg:Atom) (environment: Environment) (eval: E
             Environment = environment
         }
         
-        environment.Symbols[symbol] <- func
+        environment.Symbols[symbolName] <- func
         
         symbol
     | _ -> failwith "define must be called with two arguments"
