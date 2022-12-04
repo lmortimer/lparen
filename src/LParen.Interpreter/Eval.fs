@@ -44,9 +44,7 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
     | List x ->
         let symbol = x.Head
         let args = x.Tail
-        
-        printfn $"Calling {symbol} with {args}"
-        
+                
         // find the lambda we previously defined
         let callable =
             match find symbol environment with
