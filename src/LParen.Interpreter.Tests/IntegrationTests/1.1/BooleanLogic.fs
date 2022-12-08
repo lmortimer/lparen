@@ -76,7 +76,7 @@ let ``cond - fails when no expressions are passed in the clauses`` () =
     let exp = Assert.Throws<Exception>(
         fun () -> evaluateSingleExpressionAndAssertEquals "(cond (true) (false))" (Atom.Integer 1))
         
-    Assert.Equal("Expected clause in `cond` to be (<predicate> <expression). Instead received: $List [Boolean true]", exp.Message)
+    Assert.Equal("Expected clause in `cond` to be (<predicate> <expression). Instead received: $[True]", exp.Message)
     
 [<Fact>]
 let ``cond - fails when predicate doesn't evaluate to a boolean`` () =
@@ -84,4 +84,4 @@ let ``cond - fails when predicate doesn't evaluate to a boolean`` () =
     let exp = Assert.Throws<Exception>(
         fun () -> evaluateSingleExpressionAndAssertEquals "(cond (false false) ((+ 1 1) true))" (Atom.Integer 1))
     
-    Assert.Equal("Predicate passed to `cond` must evaluate to a boolean. List [Symbol \"+\"; Integer 1; Integer 1] does not.", exp.Message)
+    Assert.Equal("Predicate passed to `cond` must evaluate to a boolean. [+; 1; 1] does not.", exp.Message)

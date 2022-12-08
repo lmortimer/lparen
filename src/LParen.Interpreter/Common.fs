@@ -8,6 +8,13 @@ type Atom =
     | Boolean of bool
     | List of Atom list
     | Lambda of Lambda
+    with override this.ToString() =
+            match this with
+            | Integer x -> $"{x}"
+            | Symbol x -> x
+            | Boolean x -> $"{x}"
+            | List x -> $"{x}"
+            | Lambda x -> $"Lambda with params: {x.Parameters}"
 and
     Lambda = {
         Parameters: Atom list
