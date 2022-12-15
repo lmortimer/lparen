@@ -52,3 +52,23 @@ let ``tail fails when called on a non-list`` () =
         fun () -> evaluateSingleExpressionAndAssertEquals "(tail 1)" (Atom.Integer 1))
     
     Assert.Equal("tail expects a List. Instead got called on value: 1", expInt.Message)
+
+
+[<Fact>]
+let ``empty? return behaviour on lists`` () =
+    
+    evaluateSingleExpressionAndAssertEquals "(empty? (list 1 2))" (Atom.Boolean false)
+    evaluateSingleExpressionAndAssertEquals "(empty? (list))" (Atom.Boolean true)
+    
+[<Fact>]
+let ``empty? fails when called on a non-list`` () =
+       
+    let expBool = Assert.Throws<Exception>(
+        fun () -> evaluateSingleExpressionAndAssertEquals "(empty? true)" (Atom.Integer 1))
+    
+    Assert.Equal("empty? expects a List. Instead got called on value: True", expBool.Message)
+
+    let expInt = Assert.Throws<Exception>(
+        fun () -> evaluateSingleExpressionAndAssertEquals "(empty? 1)" (Atom.Integer 1))
+    
+    Assert.Equal("empty? expects a List. Instead got called on value: 1", expInt.Message)

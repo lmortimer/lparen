@@ -26,6 +26,7 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
     | List x when x.Head = Symbol "list" -> listForm x.Tail environment eval
     | List [Symbol "head"; atomList] -> headForm atomList environment eval
     | List [Symbol "tail"; atomList] -> tailForm atomList environment eval
+    | List [Symbol "empty?"; atomList] -> emptyForm atomList environment eval
 
     // builtins
     | List x when List.exists (fun v -> x.Head = v) [Atom.Symbol "+"; Atom.Symbol "-"] ->

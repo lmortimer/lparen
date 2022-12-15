@@ -37,3 +37,17 @@ let tailForm (param: Atom) (environment: Environment) (eval: Eval): Atom =
     match evaluatedParameter with
     | List x -> Atom.List x.Tail
     | _ -> failwith $"tail expects a List. Instead got called on value: {param}"
+
+// Return a boolean indicating whether the list is empty.
+// eg.
+// >> (empty? (list 1 2 3))
+// false
+// >> (empty? (list))
+// true
+let emptyForm (param: Atom) (environment: Environment) (eval: Eval): Atom =
+    
+    let evaluatedParameter = eval param environment
+    
+    match evaluatedParameter with
+    | List x -> Atom.Boolean x.IsEmpty
+    | _ -> failwith $"empty? expects a List. Instead got called on value: {param}"
