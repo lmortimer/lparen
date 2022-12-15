@@ -14,6 +14,7 @@
     <Compile Include="Library\Lambda.fs" />
     <Compile Include="Library\BooleanLogic.fs" />
     <Compile Include="Library\Math.fs" />
+    <Compile Include="Library\List.fs" />
     <Compile Include="Eval.fs" />
   </ItemGroup>
   

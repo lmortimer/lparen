@@ -1,10 +1,10 @@
 module LParen.Interpreter.Eval
 
-open System.Collections.Generic
 open LParen.Interpreter.Common
 open LParen.Interpreter.Environment
 open LParen.Interpreter.Library.Define
 open LParen.Interpreter.Library.Lambda
+open LParen.Interpreter.Library.List
 open LParen.Interpreter.Library.BooleanLogic
 open LParen.Interpreter.Library.Math
 
@@ -22,8 +22,11 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
     | List x when x.Head = Symbol "and" -> andFormShortCircuit x.Tail environment eval
     | List x when x.Head = Symbol "or" -> orFormShortCircuit x.Tail environment eval
     | List x when x.Head = Symbol "cond" -> condForm x.Tail environment eval
+    // List forms
+    | List x when x.Head = Symbol "list" -> listForm x.Tail environment eval
+    | List [Symbol "head"; atomList] -> headForm atomList environment eval
+    | List [Symbol "tail"; atomList] -> tailForm atomList environment eval
 
-        
     // builtins
     | List x when List.exists (fun v -> x.Head = v) [Atom.Symbol "+"; Atom.Symbol "-"] ->
         let operator =
