@@ -1,7 +1,6 @@
 module LParen.Exe.Repl
 
 open System
-open LParen.Interpreter.Common
 open LParen.Interpreter.Environment
 open LParen.Interpreter.Parser
 open LParen.Interpreter.Eval
