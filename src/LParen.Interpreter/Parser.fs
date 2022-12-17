@@ -8,8 +8,6 @@ open FParsec
 // let parseString =
 //     skipChar '"' >>. manyChars (noneOf "\"") .>> skipChar '"' |>> Unit.String
 
-// let parseQuote =
-    // skipChar '\'' >>. lispValue |>> fun x -> Unit.List [Unit.Atom "quote"; x]
 
 let parseBoolean =
     (pstring "true" >>% Atom.Boolean true) <|>
@@ -30,14 +28,18 @@ let parseList =
     (attempt (sepBy atomValue spaces1) <|> sepEndBy1 atomValue spaces1)
     .>> spaces .>> skipChar ')' 
     |>> Atom.List
+    
+let parseQuote =
+    skipChar '\'' >>. atomValue |>> fun x -> Atom.List [Atom.Symbol "quote"; x]
+
 
 do atomValueRef.Value <- choice [
     parseBoolean
     parseSymbol
     parseInteger
     parseList
+    parseQuote
 ]
-
 
 let parseSingleExpression = spaces >>. atomValue .>> spaces
 

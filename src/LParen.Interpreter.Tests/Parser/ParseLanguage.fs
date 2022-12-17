@@ -17,7 +17,7 @@ let ``Single expression parses to larger lists`` () =
         | Error _ -> failwith "Shouldn't be here"
     
     Assert.Collection(output,
-        fun elem1 -> Assert.Equal(elem1, expected.Head))
+        fun elem1 -> Assert.Equal(expected.Head, elem1))
 
 [<Fact>]
 let ``Two top level expressions parse to a list of length two`` () =

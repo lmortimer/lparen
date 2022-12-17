@@ -17,6 +17,7 @@
     <Compile Include="IntegrationTests\Quote.fs" />
     <Compile Include="Parser\ParsePrimitives.fs" />
     <Compile Include="Parser\ParseLanguage.fs" />
+    <Compile Include="Parser\ParseQuote.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
