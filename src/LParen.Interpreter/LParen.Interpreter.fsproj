@@ -15,6 +15,7 @@
     <Compile Include="Library\BooleanLogic.fs" />
     <Compile Include="Library\Math.fs" />
     <Compile Include="Library\List.fs" />
+    <Compile Include="Library\Quote.fs" />
     <Compile Include="Eval.fs" />
   </ItemGroup>
   
