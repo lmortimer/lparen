@@ -9,26 +9,30 @@ open LParen.Interpreter.Library.BooleanLogic
 open LParen.Interpreter.Library.Math
 open LParen.Interpreter.Library.Quote
 
-let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
+let rec eval: Eval = fun (environment: Environment) (exp: Atom) ->
 
+    // partially apply the current environment. most library functions need this and it saves having to pass eval and
+    // the environment everywhere
+    let evalWithCurrentEnvironment: EvalInImplicitEnvironment = eval environment
+    
     match exp with
     | Integer x -> Atom.Integer x
     | Boolean x -> Atom.Boolean x
     | List [Symbol "define"; firstArg; secondArg] -> define firstArg secondArg environment eval
     | List [Symbol "quote"; atom] -> quote atom
     | List [Symbol "lambda"; parameters; body] -> lambda parameters body environment
-    | List [Symbol "="; firstArg; secondArg] -> atomEquality (eval firstArg environment) (eval secondArg environment)
-    | List [Symbol ">"; firstArg; secondArg] -> atomGreaterThan (eval firstArg environment) (eval secondArg environment)
-    | List [Symbol "<"; firstArg; secondArg] -> atomLessThan (eval firstArg environment) (eval secondArg environment)
-    | List [Symbol "if"; predicate; consequent; alternative] -> ifForm predicate consequent alternative environment eval
-    | List x when x.Head = Symbol "and" -> andFormShortCircuit x.Tail environment eval
-    | List x when x.Head = Symbol "or" -> orFormShortCircuit x.Tail environment eval
-    | List x when x.Head = Symbol "cond" -> condForm x.Tail environment eval
+    | List [Symbol "="; firstArg; secondArg] -> atomEquality (evalWithCurrentEnvironment firstArg) (evalWithCurrentEnvironment secondArg)
+    | List [Symbol ">"; firstArg; secondArg] -> atomGreaterThan (evalWithCurrentEnvironment firstArg) (evalWithCurrentEnvironment secondArg)
+    | List [Symbol "<"; firstArg; secondArg] -> atomLessThan (evalWithCurrentEnvironment firstArg) (evalWithCurrentEnvironment secondArg)
+    | List [Symbol "if"; predicate; consequent; alternative] -> ifForm predicate consequent alternative evalWithCurrentEnvironment
+    | List x when x.Head = Symbol "and" -> andFormShortCircuit x.Tail evalWithCurrentEnvironment
+    | List x when x.Head = Symbol "or" -> orFormShortCircuit x.Tail evalWithCurrentEnvironment
+    | List x when x.Head = Symbol "cond" -> condForm x.Tail evalWithCurrentEnvironment
     // List forms
-    | List x when x.Head = Symbol "list" -> listForm x.Tail environment eval
-    | List [Symbol "head"; atomList] -> headForm atomList environment eval
-    | List [Symbol "tail"; atomList] -> tailForm atomList environment eval
-    | List [Symbol "empty?"; atomList] -> emptyForm atomList environment eval
+    | List x when x.Head = Symbol "list" -> listForm x.Tail evalWithCurrentEnvironment
+    | List [Symbol "head"; atomList] -> headForm atomList evalWithCurrentEnvironment
+    | List [Symbol "tail"; atomList] -> tailForm atomList evalWithCurrentEnvironment
+    | List [Symbol "empty?"; atomList] -> emptyForm atomList evalWithCurrentEnvironment
 
     // builtins
     | List x when List.exists (fun v -> x.Head = v) [Atom.Symbol "+"; Atom.Symbol "-"] ->
@@ -39,7 +43,7 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
             | _ -> failwith $"Operator {x.Head} unsupported"
             
         x.Tail
-        |> List.map (fun atom -> eval atom environment)
+        |> List.map evalWithCurrentEnvironment
         |> List.reduce operator
     // user defined symbols
     | Symbol s ->
@@ -60,7 +64,7 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
         // evaluate the arguments being passed into the function call, these may themselves be lambda calls
         let evaluatedArgs =
             args
-            |> List.map (fun atom -> eval atom environment)
+            |> List.map evalWithCurrentEnvironment
         
         // when executing a lambda we create its own environment (execution context) so that
         // symbols local to the lambda don't pollute anything higher in the stack.
@@ -79,6 +83,6 @@ let rec eval: Eval = fun (exp: Atom) (environment: Environment) ->
                     | _ -> failwith $"Lambda parameter Symbols are expected to be Atom.Symbol. Instead got: {parameter} = {value}"
                 lambdaEnvironment.Symbols[parameterName] <- value)
             
-            eval lambda.Body lambdaEnvironment
+            eval lambdaEnvironment lambda.Body
         | _ -> failwith $"Symbol {symbol} is not callable"
     | Lambda x -> failwith $"Lambda with {x}"

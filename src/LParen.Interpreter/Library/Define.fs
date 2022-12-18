@@ -21,7 +21,7 @@ let define (firstArg: Atom) (secondArg:Atom) (environment: Environment) (eval: E
             | _ -> failwith $"define expects the symbol name to be an Atom.Symbol. Instead got value: {firstArg}"
             
         let value = secondArg   // 100
-        environment.Symbols[symbolName] <- eval value environment
+        environment.Symbols[symbolName] <- eval environment value
         symbol
     // 2. defining a function. eg: (define (add x y) (+ x y))
     | List _ ->

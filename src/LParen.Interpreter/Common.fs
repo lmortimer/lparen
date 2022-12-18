@@ -28,4 +28,9 @@ and
     }
 
 // Evaluates an Atom in an Environment
-type Eval = Atom -> Environment -> Atom
+type Eval = Environment -> Atom -> Atom
+
+// Shortcut used within `eval`
+// In the majority of cases `eval` is executed in the current environment. Using this type
+// saves us having to explicitly pass a reference to `eval` and the current environment everywhere.
+type EvalInImplicitEnvironment = Atom -> Atom

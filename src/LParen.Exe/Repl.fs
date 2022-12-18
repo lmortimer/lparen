@@ -27,7 +27,7 @@ let repl () =
                
                 expressionsToExecute
                 |> List.map (fun expr ->
-                    let result = eval expr global_environment
+                    let result = eval global_environment expr
 
                     printfn $"{result}"
                     ))

@@ -12,7 +12,7 @@ let evaluateSingleExpressionAndAssertEqualsWithEnvironment (input: string) (expe
     
     let output =
         singleExpressionParser input
-        |> Result.map (fun tokens -> eval tokens environment)
+        |> Result.map (fun tokens -> eval environment tokens)
         
     match output with
     | Ok output -> Assert.Equal(expectedOutput, output)
@@ -26,7 +26,7 @@ let evaluateSingleExpressionAndAssertEquals (input: string) (expectedOutput: Ato
     
     let output =
         singleExpressionParser input
-        |> Result.map (fun tokens -> eval tokens environment)
+        |> Result.map (fun tokens -> eval environment tokens)
         
     match output with
     | Ok output -> Assert.Equal(expectedOutput, output)

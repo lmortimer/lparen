@@ -6,11 +6,11 @@ open LParen.Interpreter.Common
 // eg.
 // (list 1 2 3)
 // (list (1 2) true)
-let listForm (parameters: Atom list) (environment: Environment) (eval: Eval): Atom =
+let listForm (parameters: Atom list) (eval: EvalInImplicitEnvironment): Atom =
     
     let evaluatedParameters =
         parameters
-        |> List.map (fun atom -> eval atom environment)
+        |> List.map eval
     
     Atom.List evaluatedParameters
     
@@ -18,9 +18,9 @@ let listForm (parameters: Atom list) (environment: Environment) (eval: Eval): At
 // eg.
 // >> (head (list 1 2 3))
 // 1
-let headForm (param: Atom) (environment: Environment) (eval: Eval): Atom =
+let headForm (param: Atom) (eval: EvalInImplicitEnvironment): Atom =
     
-    let evaluatedParameter = eval param environment
+    let evaluatedParameter = eval param
     
     match evaluatedParameter with
     | List x -> x.Head
@@ -30,9 +30,9 @@ let headForm (param: Atom) (environment: Environment) (eval: Eval): Atom =
 // eg.
 // >> (tail (list 1 2 3))
 // (2 3)
-let tailForm (param: Atom) (environment: Environment) (eval: Eval): Atom =
+let tailForm (param: Atom) (eval: EvalInImplicitEnvironment): Atom =
     
-    let evaluatedParameter = eval param environment
+    let evaluatedParameter = eval param
     
     match evaluatedParameter with
     | List x -> Atom.List x.Tail
@@ -44,9 +44,9 @@ let tailForm (param: Atom) (environment: Environment) (eval: Eval): Atom =
 // false
 // >> (empty? (list))
 // true
-let emptyForm (param: Atom) (environment: Environment) (eval: Eval): Atom =
+let emptyForm (param: Atom) (eval: EvalInImplicitEnvironment): Atom =
     
-    let evaluatedParameter = eval param environment
+    let evaluatedParameter = eval param
     
     match evaluatedParameter with
     | List x -> Atom.Boolean x.IsEmpty

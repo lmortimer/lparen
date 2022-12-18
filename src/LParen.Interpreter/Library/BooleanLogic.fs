@@ -9,13 +9,13 @@ open LParen.Interpreter.Common
 // eg
 // >> (if (= 1 1) true false)
 // true
-let ifForm (predicate: Atom) (consequent: Atom) (alternative: Atom) (environment: Environment) (eval: Eval): Atom =
+let ifForm (predicate: Atom) (consequent: Atom) (alternative: Atom) (eval: EvalInImplicitEnvironment): Atom =
     
-    let evaluatedPredicate = eval predicate environment
+    let evaluatedPredicate = eval predicate
     
     match evaluatedPredicate with
-    | Atom.Boolean true -> eval consequent environment
-    | Atom.Boolean false -> eval alternative environment
+    | Atom.Boolean true -> eval consequent
+    | Atom.Boolean false -> eval alternative
     | _ -> failwith $"Predicate passed to if must evaluate to a boolean. {predicate} does not."
     
 // Evaluate the special form `and`
@@ -28,10 +28,10 @@ let ifForm (predicate: Atom) (consequent: Atom) (alternative: Atom) (environment
 // true
 // >> (and false)
 // false
-let andForm (expressions: Atom list) (environment: Environment) (eval: Eval) =
+let andForm (expressions: Atom list) (eval: EvalInImplicitEnvironment) =
     let evaluatedExpressions =
         expressions
-        |> List.map (fun atom -> eval atom environment)
+        |> List.map eval
         |> List.map (fun atom ->
             match atom with
             | Boolean x -> x
@@ -40,13 +40,13 @@ let andForm (expressions: Atom list) (environment: Environment) (eval: Eval) =
         
     Atom.Boolean evaluatedExpressions
     
-let andFormShortCircuit (expressions: Atom list) (environment: Environment) (eval: Eval) =
+let andFormShortCircuit (expressions: Atom list) (eval: EvalInImplicitEnvironment) =
     
     // evaluate the atoms in parameters one by one. We stop when we get to the first false
     let hasAFalsyExpression =
         expressions
         |> List.tryFind (fun atom ->
-            let evaluatedExpr = eval atom environment
+            let evaluatedExpr = eval atom
             
             // tryFind requires the predicate function to return true when it should stop
             // confusingly this is when the atom evaluates to false
@@ -71,11 +71,11 @@ let andFormShortCircuit (expressions: Atom list) (environment: Environment) (eva
 // true
 // >> (and false true)
 // true
-let orForm (expressions: Atom list) (environment: Environment) (eval: Eval) =
+let orForm (expressions: Atom list) (eval: EvalInImplicitEnvironment) =
     
     let evaluatedExpressions =
         expressions
-        |> List.map (fun atom -> eval atom environment)
+        |> List.map eval
         |> List.map (fun atom ->
             match atom with
             | Boolean x -> x
@@ -84,13 +84,13 @@ let orForm (expressions: Atom list) (environment: Environment) (eval: Eval) =
         
     Atom.Boolean evaluatedExpressions
     
-let orFormShortCircuit (expressions: Atom list) (environment: Environment) (eval: Eval) =
+let orFormShortCircuit (expressions: Atom list) (eval: EvalInImplicitEnvironment) =
     
     // evaluate the atoms in parameters one by one. We stop when we get to the first true
     let hasATrueExpression =
         expressions
         |> List.tryFind (fun atom ->
-            let evaluatedExpr = eval atom environment
+            let evaluatedExpr = eval atom
             
             // tryFind requires the predicate function to return true when it should stop
             // for `or`, that's when we see the first Atom.Boolean true
@@ -118,7 +118,7 @@ let orFormShortCircuit (expressions: Atom list) (environment: Environment) (eval
 // 1
 // >> (cond (false 1) (true 2))
 // 2
-let condForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
+let condForm (parameters: Atom list) (eval: EvalInImplicitEnvironment) =
     
     let predicateThatEvaluatesToTrue =
         parameters
@@ -130,7 +130,7 @@ let condForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
             | _ -> failwith $"Expected clause in `cond` to be (<predicate> <expression). Instead received: ${clause}")
         |> List.tryFind (fun (predicate, _) -> // now search for the first predicate that evaluates to true
            
-            let evaluatedPredicate = eval predicate environment
+            let evaluatedPredicate = eval predicate
             
             match evaluatedPredicate with
             | Atom.Boolean b when b = true -> true // tryFind returns true on this
@@ -140,6 +140,6 @@ let condForm (parameters: Atom list) (environment: Environment) (eval: Eval) =
     // predicateThatEvaluatesToTrue contains the expression for the predicate that evaluated to true
     // or None if all predicate were false 
     match predicateThatEvaluatesToTrue with
-    | Some(_, expression) -> eval expression environment
+    | Some(_, expression) -> eval expression
     | None -> failwith "No predicate passed to `cond` evaluated to true."
            

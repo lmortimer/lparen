@@ -18,7 +18,7 @@ let executeFile (filename: string) =
         lParenParser contents
         |> Result.map (fun expressionsToExecute ->
             expressionsToExecute
-            |> List.map (fun expr -> eval expr global_environment)
+            |> List.map (fun expr -> eval global_environment expr)
             |> List.tryLast
             |> Option.map (fun f -> printfn "%A" f)
         )
