@@ -1,5 +1,6 @@
 module LParen.Interpreter.Library.List
 
+open System.Security.Cryptography
 open LParen.Interpreter.Common
 
 // Define a list.
@@ -51,3 +52,21 @@ let emptyForm (param: Atom) (eval: EvalInImplicitEnvironment): Atom =
     match evaluatedParameter with
     | List x -> Atom.Boolean x.IsEmpty
     | _ -> failwith $"empty? expects a List. Instead got called on value: {param}"
+
+let mapFn (fn: Atom) (param: Atom) (eval: EvalInImplicitEnvironment): Atom =
+    
+    let callable =
+        match (eval fn) with
+        | Lambda x -> x
+        | _ -> failwith $"map's first argument must be a callable function. Instead got {fn}."
+        
+    let listToMap =
+        match (eval param) with
+        | List x -> x
+        | _ -> failwith $"map's second argument must be a list. Instead got {param}."
+        
+    let applied = 
+        listToMap
+        |> List.map (fun atom -> eval atom)
+        
+    Atom.List applied
