@@ -16,6 +16,7 @@
     <Compile Include="IntegrationTests\Lists.fs" />
     <Compile Include="IntegrationTests\Quote.fs" />
     <Compile Include="IntegrationTests\Apply.fs" />
+    <Compile Include="IntegrationTests\Eval.fs" />
     <Compile Include="Parser\ParsePrimitives.fs" />
     <Compile Include="Parser\ParseLanguage.fs" />
     <Compile Include="Parser\ParseQuote.fs" />
