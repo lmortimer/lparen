@@ -8,7 +8,6 @@ open LParen.Interpreter.Library.Lambda
 open LParen.Interpreter.Library.List
 open LParen.Interpreter.Library.BooleanLogic
 open LParen.Interpreter.Library.Math
-open LParen.Interpreter.Library.Quote
 
 let rec eval: Eval = fun (environment: Environment) (exp: Atom) ->
 
@@ -20,7 +19,7 @@ let rec eval: Eval = fun (environment: Environment) (exp: Atom) ->
     | Integer x -> Atom.Integer x
     | Boolean x -> Atom.Boolean x
     | List [Symbol "define"; firstArg; secondArg] -> define firstArg secondArg environment eval
-    | List [Symbol "quote"; atom] -> quote atom
+    | List [Symbol "quote"; atom] -> atom
     | List [Symbol "lambda"; parameters; body] -> lambda parameters body environment
     | List [Symbol "="; firstArg; secondArg] -> atomEquality firstArg secondArg
     | List [Symbol ">"; firstArg; secondArg] -> atomGreaterThan (evalWithCurrentEnvironment firstArg) (evalWithCurrentEnvironment secondArg)

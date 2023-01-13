@@ -1,6 +1,5 @@
 module LParen.Interpreter.Tests.IntegrationTests.Apply
 
-open System
 open Xunit
 
 open LParen.Interpreter.Common
