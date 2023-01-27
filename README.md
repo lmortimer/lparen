@@ -27,3 +27,12 @@ REPL:
 Execute a file:
 
     dotnet run --project src/LParen.Exe -- --file src/LParen.Exe/Examples/fibonacci-numbers.scm
+
+# Web
+This project cross-compiles to Javascript using [Fable](https://fable.io/). Requires NodeJS installed locally. Run the REPL in your web browser by
+
+    cd fable
+    npm ci
+    npm start
+
+
