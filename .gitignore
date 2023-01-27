@@ -4,3 +4,4 @@ bin/
 obj/
 src.sln.DotSettings.user
 .store/
+*.fs.js

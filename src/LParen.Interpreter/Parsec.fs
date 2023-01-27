@@ -761,7 +761,7 @@ module CharParsers =
     let opt =
       let o = RegexOptions.ECMAScript ||| RegexOptions.Multiline
       if compiled then o ||| RegexOptions.Compiled else o
-    let regex = Regex("\\A" + pattern, opt)
+    let regex = Regex(pattern, opt)
     fun (state, s) ->
       let str = s.Value
       let m = regex.Match str
