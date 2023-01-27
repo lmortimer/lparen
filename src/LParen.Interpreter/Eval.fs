@@ -21,7 +21,7 @@ let rec eval: Eval = fun (environment: Environment) (exp: Atom) ->
     | List [Symbol "define"; firstArg; secondArg] -> define firstArg secondArg environment eval
     | List [Symbol "quote"; atom] -> atom
     | List [Symbol "lambda"; parameters; body] -> lambda parameters body environment
-    | List [Symbol "="; firstArg; secondArg] -> atomEquality firstArg secondArg
+    | List [Symbol "="; firstArg; secondArg] -> atomEquality (evalWithCurrentEnvironment firstArg) (evalWithCurrentEnvironment secondArg)
     | List [Symbol ">"; firstArg; secondArg] -> atomGreaterThan (evalWithCurrentEnvironment firstArg) (evalWithCurrentEnvironment secondArg)
     | List [Symbol "<"; firstArg; secondArg] -> atomLessThan (evalWithCurrentEnvironment firstArg) (evalWithCurrentEnvironment secondArg)
     | List [Symbol "if"; predicate; consequent; alternative] -> ifForm predicate consequent alternative evalWithCurrentEnvironment
