@@ -69,21 +69,3 @@ let emptyForm (param: Atom) (eval: EvalInImplicitEnvironment): Atom =
     |> validateListOrFailWith $"empty? expects a List. Instead got called on value: {param}"
     |> List.isEmpty
     |> Atom.Boolean
-
-let mapFn (fn: Atom) (param: Atom) (eval: EvalInImplicitEnvironment): Atom =
-    
-    let callable =
-        match (eval fn) with
-        | Lambda x -> x
-        | _ -> failwith $"map's first argument must be a callable function. Instead got {fn}."
-        
-    let listToMap =
-        match (eval param) with
-        | List x -> x
-        | _ -> failwith $"map's second argument must be a list. Instead got {param}."
-        
-    let applied = 
-        listToMap
-        |> List.map (fun atom -> eval atom)
-        
-    Atom.List applied
