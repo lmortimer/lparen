@@ -11,6 +11,7 @@
         <Compile Include="Program.fs" />
         <Content Include="Examples\first-class-functions.scm" />
         <Content Include="Examples\fibonacci-numbers.scm" />
+        <Content Include="Examples\native-list-length.scm" />
         <Content Include="Examples\list-length.scm" />
     </ItemGroup>
 

@@ -36,6 +36,10 @@ let rec eval: Eval = fun (environment: Environment) (exp: Atom) ->
     | List x when x.Head = Symbol "apply" -> applyForm x.Tail eval environment
     | List [Symbol "eval"; List [Symbol "quote"; expression]] -> evalWithCurrentEnvironment expression
     | List [Symbol "map"; fn; atomList] -> mapFn fn atomList evalWithCurrentEnvironment
+    
+    // List module
+    | List [Symbol "List.length"; atomList] -> listLength atomList evalWithCurrentEnvironment
+    
 
     // builtins
     | List x when List.exists (fun v -> x.Head = v) [Atom.Symbol "+"; Atom.Symbol "-"] ->
