@@ -8,7 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Fable.Browser.Dom" Version="2.2.0" />
     <PackageReference Include="Fable.Core" Version="3.2.3" />
-    <ProjectReference Include="..\..\src\LParen.Interpreter\LParen.Interpreter.fsproj" />
+    <ProjectReference Include="..\..\LParen.Interpreter\LParen.Interpreter.fsproj" />
   </ItemGroup>
 
 </Project>

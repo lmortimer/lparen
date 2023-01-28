@@ -31,7 +31,7 @@ Execute a file:
 # Web
 This project cross-compiles to Javascript using [Fable](https://fable.io/). Requires NodeJS installed locally. Run the REPL in your web browser by
 
-    cd fable
+    cd src/LParen.Web
     npm ci
     npm start
 
