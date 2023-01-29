@@ -31,9 +31,9 @@ let applyForm (parameters: Atom list) (eval: Eval) (environment: Environment): A
         List.zip lambda.Parameters evaluatedArgs
         |> List.iter (fun (parameter, value) ->
             let parameterName =
-                match parameter with      // add
-                | Symbol s -> s
-                | _ -> failwith $"Lambda parameter Symbols are expected to be Atom.Symbol. Instead got: {parameter} = {value}"
+                parameter
+                |> validateSymbolOrFailWith $"Lambda parameter Symbols are expected to be Atom.Symbol. Instead got: {parameter} = {value}"
+                
             lambdaEnvironment.Symbols[parameterName] <- value)
         
         eval lambdaEnvironment lambda.Body
