@@ -6,39 +6,25 @@ open LParen.Interpreter.Common
 // eg.
 // (define x 100)
 // (define (add x y) (+ x y))
-let define (firstArg: Atom) (secondArg:Atom) (environment: Environment) (eval: Eval): Atom =
+let define (firstArg: Atom) (secondArg: Atom) (environment: Environment) (eval: Eval): Atom =
     
     // define can be in one of two formats
     match firstArg with
     
     // 1. assigning a value to a symbol. eg: (define x 100)
-    | Symbol s ->
+    | Symbol symbol ->
         
-        let symbol = firstArg // x
-        let symbolName = // x
-            match symbol with
-            | Symbol s -> s
-            | _ -> failwith $"define expects the symbol name to be an Atom.Symbol. Instead got value: {firstArg}"
-            
-        let value = secondArg   // 100
-        environment.Symbols[symbolName] <- eval environment value
-        symbol
+        let value = eval environment secondArg
+        environment.Symbols[symbol] <- value
+        Atom.Symbol symbol
     // 2. defining a function. eg: (define (add x y) (+ x y))
-    | List _ ->
-                    
-        // if the first arg is a list then extract the Atoms
-        let parsedFirstArg =
-            match firstArg with
-            | List atoms -> atoms
-            | _ -> failwith $"First argument to define expected to be a list of Atoms"
-    
-        let symbol = parsedFirstArg.Head // add
-        let symbolName =
-            match symbol with      // add
-            | Symbol s -> s
-            | _ -> failwith $"define expects the symbol name to be an Atom.Symbol. Instead got value: {firstArg}"
+    | List symbols ->
+
+        let symbol =
+            symbols.Head // add
+            |> validateSymbolOrFailWith $"define expects the symbol name to be an Atom.Symbol. Instead got value: {firstArg}"
             
-        let parameters = parsedFirstArg.Tail // [x; y]
+        let parameters = symbols.Tail // [x; y]
                
         let func = Atom.Lambda {
             Parameters = parameters
@@ -46,8 +32,8 @@ let define (firstArg: Atom) (secondArg:Atom) (environment: Environment) (eval: E
             Environment = environment
         }
         
-        environment.Symbols[symbolName] <- func
+        environment.Symbols[symbol] <- func
         
-        symbol
-    | _ -> failwith "define must be called with two arguments"
+        Atom.Symbol symbol
+    | _ -> failwith "define must be called with two arguments: symbol name and symbol value"
     

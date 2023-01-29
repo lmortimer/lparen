@@ -41,3 +41,9 @@ let validateListOrFailWith (failMessage: string) (atom: Atom): Atom list =
     match atom with
     | List x -> x
     | _ -> failwith failMessage
+    
+let validateSymbolOrFailWith (failMessage: string) (atom: Atom): string =
+        
+    match atom with
+    | Symbol x -> x
+    | _ -> failwith failMessage
