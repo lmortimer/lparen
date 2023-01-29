@@ -1,13 +1,6 @@
 module LParen.Interpreter.Library.List
 
-open System.Security.Cryptography
 open LParen.Interpreter.Common
-
-let validateListOrFailWith (failMessage: string) (atom: Atom): Atom list =
-        
-    match atom with
-    | List x -> x
-    | _ -> failwith failMessage
 
 // Define a list.
 // eg.

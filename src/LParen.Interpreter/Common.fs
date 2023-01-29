@@ -34,3 +34,10 @@ type Eval = Environment -> Atom -> Atom
 // In the majority of cases `eval` is executed in the current environment. Using this type
 // saves us having to explicitly pass a reference to `eval` and the current environment everywhere.
 type EvalInImplicitEnvironment = Atom -> Atom
+
+// Given an Atom, unwrap a list or fail
+let validateListOrFailWith (failMessage: string) (atom: Atom): Atom list =
+        
+    match atom with
+    | List x -> x
+    | _ -> failwith failMessage
