@@ -27,6 +27,13 @@ let ``Can parse Booleans`` () =
     parsesAndEquals "false" (Atom.Boolean false)
     
 [<Fact>]
+let ``Can parse Strings`` () =
+    
+    // fsharp verbatim strings are wrapped with @" ... ". double "" indicates a single "
+    parsesAndEquals """true""" (Atom.Boolean true)
+    parsesAndEquals @"""true""" (Atom.String "true")
+    
+[<Fact>]
 let ``Can parse lists`` () =
     
     parsesAndEquals "(hello)" (Atom.List [Atom.Symbol "hello"])

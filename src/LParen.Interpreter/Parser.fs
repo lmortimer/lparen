@@ -4,9 +4,8 @@ open LParen.Interpreter.Common
 open LParen.Interpreter.Parsec
 // customising error messages https://www.quanttec.com/fparsec/users-guide/customizing-error-messages.html
 
-// let parseString =
-//     skipChar '"' >>. manyChars (noneOf "\"") .>> skipChar '"' |>> Unit.String
-
+let parseString =
+    skipChar '"' >>. manyChars (noneOf "\"") .>> skipChar '"' |>> Atom.String
 
 let parseBoolean =
     (pstring "true" >>% Atom.Boolean true) <|>
@@ -33,6 +32,7 @@ let parseQuote =
 
 
 do atomValueRef.Value <- choice [
+    parseString
     parseBoolean
     parseSymbol
     parseInteger

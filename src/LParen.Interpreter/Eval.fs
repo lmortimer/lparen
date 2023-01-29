@@ -16,6 +16,7 @@ let rec eval: Eval = fun (environment: Environment) (exp: Atom) ->
     let evalWithCurrentEnvironment: EvalInImplicitEnvironment = eval environment
     
     match exp with
+    | String x -> Atom.String x
     | Integer x -> Atom.Integer x
     | Boolean x -> Atom.Boolean x
     | List [Symbol "define"; firstArg; secondArg] -> define firstArg secondArg environment eval
